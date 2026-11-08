@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html data-mode="bi" lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Junie Lau 的独立导读：老F 的 Image F 如何测量 Midjourney 原图、写成 GPT 提示词，再把色彩、虚化和颗粒还原回来。An independent guide to Image F by 老F — fix a Midjourney frame with GPT, then keep MJ’s colour, blur and grain.">
+<meta name="author" content="Junie Lau">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Image F · 修 MJ，还气质">
+<meta property="og:description" content="Junie Lau 的独立导读。工具由老F 设计：修 Midjourney 的小错，把色彩、虚化和颗粒留在原图里。">
+<meta property="og:url" content="https://junielau.github.io/Imagechagptmj/">
+<link rel="canonical" href="https://junielau.github.io/Imagechagptmj/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f3efe6'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Georgia' font-size='16' fill='%231b1916'%3EF%3C/text%3E%3C/svg%3E">
+<title>Image F · 修 MJ，还气质</title>
+<link rel="stylesheet" href="./style.css">
+<script>try{let m=localStorage.getItem('imagef-guide-language');if(['bi','zh','en'].includes(m))document.documentElement.dataset.mode=m}catch(e){}</script>
+<script defer src="./app.js"></script>
+</head>
+<body>
+<a class="skip" href="#top"><span class="zh" lang="zh-CN">跳到正文</span><span class="en" lang="en">Skip to content</span></a>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">F</span>
+      <span class="brand-name"><span class="zh" lang="zh-CN">Image F 导读</span><span class="en" lang="en">Image F guide</span></span>
+    </a>
+    <nav class="site-nav" aria-label="页面 / On this page">
+      <a href="#why"><span class="zh" lang="zh-CN">为何</span><span class="en" lang="en">Why</span></a>
+      <a href="#path"><span class="zh" lang="zh-CN">流程</span><span class="en" lang="en">Path</span></a>
+      <a href="#pages"><span class="zh" lang="zh-CN">五页</span><span class="en" lang="en">Pages</span></a>
+      <a href="#install"><span class="zh" lang="zh-CN">安装</span><span class="en" lang="en">Install</span></a>
+      <a href="#license"><span class="zh" lang="zh-CN">许可</span><span class="en" lang="en">License</span></a>
+    </nav>
+    <div class="language" role="group" aria-label="语言 / Language">
+      <button type="button" data-lang="bi" aria-pressed="true">中英</button>
+      <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+      <button type="button" data-lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero-intro">
+      <p class="eyebrow"><span class="zh" lang="zh-CN">Junie Lau · 独立导读</span><span class="en" lang="en">Junie Lau · Independent guide</span></p>
+      <h1 id="hero-title">
+        <span class="title-kicker">Image F ·</span>
+        <span class="zh" lang="zh-CN">修 MJ，还气质</span>
+        <span class="en" lang="en">Fix MJ, keep the look</span>
+      </h1>
+    </div>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="lede">
+          <span class="zh" lang="zh-CN">Midjourney 的原图常常只错一两处。交给 GPT，错能修好，色彩、虚化和颗粒却一起变了。Image F 先测量原图、写好提示词；出图之后，再把改动以外的地方还原成 MJ 的样子。</span>
+          <span class="en" lang="en">A Midjourney original often fails in only one or two places. GPT can fix the mistake, and it also changes the colour, the blur and the grain. Image F measures the original and writes the prompt. After GPT, it restores the MJ look everywhere the fix did not reach.</span>
+        </p>
+        <p class="credit">
+          <span class="zh" lang="zh-CN">工具由 <strong>老F</strong> 构思、设计并主导开发。免费，禁止商用。这一页是 Junie 的学习笔记，不是官方站。Image F 不是 Junie 做的。</span>
+          <span class="en" lang="en">Conceived, designed and led by <strong>老F</strong>. Free for noncommercial use. This page is Junie’s study note, not the official site. Junie did not make Image F.</span>
+        </p>
+        <div class="actions">
+          <a class="cta" href="https://github.com/FXiaoai/ImageF/releases/download/v4.9/ImageF_V4.9_Setup.exe">
+            <span class="zh" lang="zh-CN">下载官方 V4.9 安装包</span>
+            <span class="en" lang="en">Download the official V4.9 installer</span>
+          </a>
+          <a class="text-link" href="#path">
+            <span class="zh" lang="zh-CN">先看工作流</span>
+            <span class="en" lang="en">Read the workflow</span>
+          </a>
+        </div>
+        <p class="quiet">
+          <span class="zh" lang="zh-CN">安装包在老F 的发布页，本站不托管文件。</span>
+          <span class="en" lang="en">The installer lives on 老F’s release. This site does not host the file.</span>
+          <a href="https://github.com/FXiaoai/ImageF/releases/tag/v4.9">Image F V4.9</a>
+        </p>
+      </div>
+      <figure class="strip">
+        <ol>
+          <li>
+            <span class="strip-no">01</span>
+            <div>
+              <p class="strip-word">MJ</p>
+              <p class="strip-label"><span class="zh" lang="zh-CN">原图，作参照</span><span class="en" lang="en">The original, as reference</span></p>
+            </div>
+          </li>
+          <li>
+            <span class="strip-no">02</span>
+            <div>
+              <p class="strip-word">GPT</p>
+              <p class="strip-label"><span class="zh" lang="zh-CN">只处理要修的地方</span><span class="en" lang="en">The place that needs a fix</span></p>
+            </div>
+          </li>
+          <li>
+            <span class="strip-no">03</span>
+            <div>
+              <p class="strip-word">MJ</p>
+              <p class="strip-label"><span class="zh" lang="zh-CN">色彩、虚化、颗粒回来</span><span class="en" lang="en">Colour, blur and grain return</span></p>
+            </div>
+          </li>
+        </ol>
+        <figcaption>
+          <span class="zh" lang="zh-CN">修错留在局部。气质回到原图。</span>
+          <span class="en" lang="en">The fix stays local. The look returns to the original.</span>
+        </figcaption>
+      </figure>
+    </div>
+    <ul class="facts">
+      <li><span class="zh" lang="zh-CN">Windows 10 / 11 · 64 位</span><span class="en" lang="en">Windows 10 / 11 · 64-bit</span></li>
+      <li><span class="zh" lang="zh-CN">只装给当前用户，无需管理员</span><span class="en" lang="en">Per-user install, no administrator</span></li>
+      <li><span class="zh" lang="zh-CN">PolyForm Noncommercial · 禁止商用</span><span class="en" lang="en">PolyForm Noncommercial · no commercial use</span></li>
+    </ul>
+  </section>
+
+  <section class="chapter" id="why" aria-labelledby="why-title">
+    <div class="section-head">
+      <p class="section-index">01</p>
+      <h2 id="why-title"><span class="zh" lang="zh-CN">气质在色彩、虚化和颗粒里</span><span class="en" lang="en">The look lives in colour, blur and grain</span></h2>
+    </div>
+    <div class="split">
+      <div class="prose">
+        <p>
+          <span class="zh" lang="zh-CN">导演守着的是一张画的气质：色调、焦点、颗粒。Midjourney 常在一两处失手——多出来的手指、错开的接缝、变形的手。这些是可以指出来的错。</span>
+          <span class="en" lang="en">A director is holding a grade, a focus and a grain. Midjourney usually misses in one or two places: an extra finger, a broken seam, a twisted hand. Those are mistakes you can point at.</span>
+        </p>
+        <p>
+          <span class="zh" lang="zh-CN">把图交给 GPT，错可以修好。颜色、景深虚化和颗粒也会被改写。明暗和雾气往往一起变。修的是局部，整张画的气质换了。</span>
+          <span class="en" lang="en">Give the frame to GPT and the mistake can be corrected. The colour, the depth-of-field blur and the grain are rewritten too, and light and haze often go with them. The repair is local. The temperament of the picture is not.</span>
+        </p>
+      </div>
+      <div class="aside-note">
+        <p class="section-index">02</p>
+        <h3><span class="zh" lang="zh-CN">两件事分开做</span><span class="en" lang="en">Two jobs, kept apart</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN"><strong>交给 GPT 之前。</strong>测量原图的色彩、焦点和颗粒，生成一段可以直接粘贴的完整提示词。除了只修错，还可以写「修错 + 换头」和「修错 + 换整个角色」。</span>
+          <span class="en" lang="en"><strong>Before GPT.</strong> It measures colour, focus and grain, and writes a complete prompt you can paste as it is. Besides a plain fix, it can write “fix + head swap” and “fix + full character swap”.</span>
+        </p>
+        <p>
+          <span class="zh" lang="zh-CN"><strong>GPT 出图之后。</strong>两张图逐像素对齐，找出真正改过的地方。其余的颜色、明暗、雾气、虚化、颗粒回到 MJ 原图。</span>
+          <span class="en" lang="en"><strong>After GPT.</strong> It aligns the two images pixel by pixel and finds what really changed. Colour, light, haze, blur and grain everywhere else return to the MJ original.</span>
+        </p>
+      </div>
+    </div>
+    <figure class="epigraph">
+      <blockquote>
+        <p class="zh" lang="zh-CN">用 GPT 修错，再把 MJ 的色彩、虚化、颗粒拉回来。</p>
+        <p class="en" lang="en">Fix Midjourney images with GPT — then bring MJ’s colour, blur and grain back.</p>
+      </blockquote>
+      <figcaption>老F · <a href="https://github.com/FXiaoai/ImageF">Image F</a></figcaption>
+    </figure>
+  </section>
+
+  <section class="chapter" id="path" aria-labelledby="path-title">
+    <div class="section-head">
+      <p class="section-index">03</p>
+      <h2 id="path-title"><span class="zh" lang="zh-CN">从原图到还原</span><span class="en" lang="en">From the original to the restore</span></h2>
+      <p class="section-lead">
+        <span class="zh" lang="zh-CN">主路是四步。标定、只还原风格、角色设定图在你需要时再打开。角色参考可以在换头之前就准备好。</span>
+        <span class="en" lang="en">The main path is four steps. Open calibration, style only, or the character sheet when you need them. A character reference can be ready before a head swap.</span>
+      </p>
+    </div>
+    <ol class="flow">
+      <li>
+        <span class="step-no">01</span>
+        <div>
+          <h3><span class="zh" lang="zh-CN">MJ 出图</span><span class="en" lang="en">MJ out</span></h3>
+          <p>
+            <span class="zh" lang="zh-CN">从 Midjourney 原图开始。它是后面测量和还原的参照。</span>
+            <span class="en" lang="en">Start from the Midjourney original. It is the reference for the measurement and for the restore.</span>
+          </p>
+        </div>
+      </li>
+      <li>
+        <span class="step-no">02</span>
+        <div>
+          <h3><span class="zh" lang="zh-CN">页面 ① · 生成提示词</span><span class="en" lang="en">Page ① · Generate prompt</span></h3>
+          <p>
+            <span class="zh" lang="zh-CN">Image F 测量原图，写出给 GPT 的提示词。可以只修错，或修错并换头，或修错并换整个角色。2×2 宫格可以先切成四格。</span>
+            <span class="en" lang="en">Image F measures the original and writes the prompt for GPT: fix only, fix and swap the head, or fix and swap the whole character. A 2×2 grid can be split into four frames first.</span>
+          </p>
+        </div>
+      </li>
+      <li>
+        <span class="step-no">03</span>
+        <div>
+          <h3><span class="zh" lang="zh-CN">粘贴给 GPT</span><span class="en" lang="en">Paste into GPT</span></h3>
+          <p>
+            <span class="zh" lang="zh-CN">把提示词整段交给 GPT，用它出图。Image F 负责测量、写提示词，以及出图之后的还原。</span>
+            <span class="en" lang="en">Give the whole prompt to GPT and let GPT make the new image. Image F measures, writes the prompt, and restores after that image exists.</span>
+          </p>
+        </div>
+      </li>
+      <li>
+        <span class="step-no">04</span>
+        <div>
+          <h3><span class="zh" lang="zh-CN">页面 ② · 还原</span><span class="en" lang="en">Page ② · Restore</span></h3>
+          <p>
+            <span class="zh" lang="zh-CN">把 GPT 出图和 MJ 原图对齐。真正改过的地方留下，其余还原成 MJ 的色彩、明暗、雾气、虚化与颗粒。</span>
+            <span class="en" lang="en">Align the GPT image with the MJ original. Keep what was really changed. Restore MJ colour, light, haze, blur and grain everywhere else.</span>
+          </p>
+        </div>
+      </li>
+      <li class="flow-optional">
+        <span class="step-no">+</span>
+        <div>
+          <h3><span class="zh" lang="zh-CN">用得到再打开</span><span class="en" lang="en">Open when you need them</span></h3>
+          <div class="optional-grid">
+            <article>
+              <h4><span class="zh" lang="zh-CN">③ 标定</span><span class="en" lang="en">③ Calibration</span></h4>
+              <p>
+                <span class="zh" lang="zh-CN">用你自己的「MJ 原图 + GPT 出图」，统计 GPT 稳定的偏色、颗粒和清晰度偏差。一般自动，越用越准。</span>
+                <span class="en" lang="en">From your own MJ original and GPT output, it learns GPT’s stable colour, grain and sharpness bias. Mostly automatic, and it improves with use.</span>
+              </p>
+            </article>
+            <article>
+              <h4><span class="zh" lang="zh-CN">④ 只还原风格</span><span class="en" lang="en">④ Style only</span></h4>
+              <p>
+                <span class="zh" lang="zh-CN">构图已经不同：四视图、设定图，或同一场景重画。按区域和远近分层迁移风格，不按像素位置对齐。</span>
+                <span class="en" lang="en">The composition is different: a 4-view sheet, a character sheet, or the same scene drawn again. Style moves by region and depth, not by pixel position.</span>
+              </p>
+            </article>
+            <article>
+              <h4><span class="zh" lang="zh-CN">⑤ 角色设定图</span><span class="en" lang="en">⑤ Character sheet</span></h4>
+              <p>
+                <span class="zh" lang="zh-CN">正面头像和四视图的提示词。做出来，当作换头或换整个角色的角色参考。可以在换头之前准备。</span>
+                <span class="en" lang="en">Prompts for a front portrait and a 4-view sheet. Make them, and use them as the character reference for a head swap or a full character swap. This can come before the swap.</span>
+              </p>
+            </article>
+          </div>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="chapter" id="pages" aria-labelledby="pages-title">
+    <div class="section-head">
+      <p class="section-index">04</p>
+      <h2 id="pages-title"><span class="zh" lang="zh-CN">工具里的五个页面</span><span class="en" lang="en">Five pages inside the tool</span></h2>
+      <p class="section-lead">
+        <span class="zh" lang="zh-CN">下面是 Image F 软件里的页面，不是本站的目录。界面和说明都有中文、英文。安装时选择；装好以后，侧栏底部的语言链接可以随时切换，软件会自动重新打开一次。</span>
+        <span class="en" lang="en">These are screens inside the Image F app, not chapters of this website. The interface and the manual are in Chinese and English. The installer asks which to use. Afterwards, the language link at the bottom of the sidebar switches it, and Image F opens itself once more.</span>
+      </p>
+    </div>
+    <div class="page-grid">
+      <article class="page-card">
+        <p class="num">①</p>
+        <h3><span class="zh" lang="zh-CN">生成提示词</span><span class="en" lang="en">Generate prompt</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN">测量 MJ 原图的色彩、焦点和颗粒，写成可直接粘贴给 GPT 的完整提示词。三种用法：只修错、修错 + 换头、修错 + 换整个角色。2×2 宫格图可以先切成四格。</span>
+          <span class="en" lang="en">Measures colour, focus and grain on the MJ original, and writes a complete prompt to paste into GPT. Three uses: fix only, fix + head swap, fix + full character swap. A 2×2 grid can be split into four first.</span>
+        </p>
+      </article>
+      <article class="page-card">
+        <p class="num">②</p>
+        <h3><span class="zh" lang="zh-CN">还原</span><span class="en" lang="en">Restore</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN">把 GPT 出图和 MJ 原图逐像素对齐，找出真正改过的地方。其余的颜色、明暗、雾气、虚化、颗粒还原成原图。</span>
+          <span class="en" lang="en">Aligns the GPT image with the MJ original pixel by pixel and finds what really changed. Colour, light, haze, blur and grain everywhere else return to the original.</span>
+        </p>
+      </article>
+      <article class="page-card">
+        <p class="num">③</p>
+        <h3><span class="zh" lang="zh-CN">标定</span><span class="en" lang="en">Calibration</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN">用你自己的一组组「MJ 原图 + GPT 出图」，学习 GPT 稳定的偏色、颗粒和清晰度偏差。一般自动，越用越准。</span>
+          <span class="en" lang="en">Learns GPT’s stable colour, grain and sharpness bias from your own pairs of MJ original and GPT output. Mostly automatic, and it improves with use.</span>
+        </p>
+      </article>
+      <article class="page-card">
+        <p class="num">④</p>
+        <h3><span class="zh" lang="zh-CN">只还原风格</span><span class="en" lang="en">Style only</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN">构图不同时用：四视图、设定图，或同一场景重画。按区域对应和远近分层迁移 MJ 的风格，不按像素位置。</span>
+          <span class="en" lang="en">For a different composition: a 4-view sheet, a character sheet, or the same scene redrawn. MJ’s style is carried across by matching regions and depth layers, not by pixel position.</span>
+        </p>
+      </article>
+      <article class="page-card page-card-wide">
+        <p class="num">⑤</p>
+        <h3><span class="zh" lang="zh-CN">角色设定图</span><span class="en" lang="en">Character sheet</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN">写出正面头像和四视图的提示词。你用这些提示词做出角色参考图，供换头或换整个角色使用。这一页给的是提示词，参考图仍要做出来。</span>
+          <span class="en" lang="en">Writes prompts for a front portrait and a 4-view sheet. You use those prompts to make the character reference for a head swap or a full character swap. This page supplies the prompts. The reference images are still made from them.</span>
+        </p>
+      </article>
+    </div>
+    <p class="manual-link">
+      <span class="zh" lang="zh-CN">带例子图的完整用法</span>
+      <span class="en" lang="en">Full instructions, with example images:</span>
+      <a href="https://github.com/FXiaoai/ImageF/blob/main/Manual_zh-CN.html">Manual_zh-CN.html</a>
+      <span aria-hidden="true"> · </span>
+      <a href="https://github.com/FXiaoai/ImageF/blob/main/Manual_en.html">Manual_en.html</a>
+    </p>
+  </section>
+
+  <section class="chapter" id="install" aria-labelledby="install-title">
+    <div class="section-head">
+      <p class="section-index">05</p>
+      <h2 id="install-title"><span class="zh" lang="zh-CN">在 Windows 上安装</span><span class="en" lang="en">Install on Windows</span></h2>
+      <p class="section-lead">
+        <span class="zh" lang="zh-CN">Windows 10 / 11，64 位。推荐官方安装包 <code>ImageF_V4.9_Setup.exe</code>。离线安装，里面已有 Python 3.10、numpy、OpenCV、Pillow。若发布页上有更新的安装包，以 <a href="https://github.com/FXiaoai/ImageF/releases">Releases</a> 为准。</span>
+        <span class="en" lang="en">Windows 10 / 11, 64-bit. The recommended file is the official installer, <code>ImageF_V4.9_Setup.exe</code>. It installs offline and already includes Python 3.10, numpy, OpenCV and Pillow. If a newer installer appears, use <a href="https://github.com/FXiaoai/ImageF/releases">Releases</a>.</span>
+      </p>
+    </div>
+    <div class="install-grid">
+      <ol class="steps">
+        <li>
+          <h3><span class="zh" lang="zh-CN">下载</span><span class="en" lang="en">Download</span></h3>
+          <p>
+            <span class="zh" lang="zh-CN">从 V4.9 发布页下载 <code>ImageF_V4.9_Setup.exe</code>，双击安装。只装给当前用户，不需要管理员权限。安装包里的核心模块是编译好的，功能和源码一致。</span>
+            <span class="en" lang="en">Download <code>ImageF_V4.9_Setup.exe</code> from the V4.9 release and double-click it. It installs for the current user only and does not need administrator rights. The core modules in the installer are compiled. They behave like the source.</span>
+          </p>
+        </li>
+        <li>
+          <h3><span class="zh" lang="zh-CN">若出现 SmartScreen</span><span class="en" lang="en">If SmartScreen appears</span></h3>
+          <p>
+            <span class="zh" lang="zh-CN">安装包没有代码签名，Windows 可能会拦截。点「更多信息」，再点「仍要运行」。</span>
+            <span class="en" lang="en">The installer is not code-signed, so Windows may warn you. Choose More info, then Run anyway.</span>
+          </p>
+        </li>
+        <li>
+          <h3><span class="zh" lang="zh-CN">语言，以及演示</span><span class="en" lang="en">Language, and the demos</span></h3>
+          <p>
+            <span class="zh" lang="zh-CN">安装时会问用中文还是英文。之后可在侧栏底部切换。同一发布页有 <code>ImageF_CN.mov</code> 与 <code>ImageF_EN.mov</code>，各约 7.5 分钟，讲它如何工作，并带操作示范。校验值写在该发布说明里。</span>
+            <span class="en" lang="en">The installer asks for Chinese or English. You can switch later at the bottom of the sidebar. The same release includes <code>ImageF_CN.mov</code> and <code>ImageF_EN.mov</code>, about 7.5 minutes each: how it works, plus a tutorial. Checksums are in those release notes.</span>
+          </p>
+        </li>
+      </ol>
+      <aside class="release-card">
+        <p class="section-index">V4.9</p>
+        <h3><span class="zh" lang="zh-CN">官方文件</span><span class="en" lang="en">Official files</span></h3>
+        <ul class="file-list">
+          <li>
+            <a href="https://github.com/FXiaoai/ImageF/releases/download/v4.9/ImageF_V4.9_Setup.exe">ImageF_V4.9_Setup.exe</a>
+            <span class="file-note"><span class="zh" lang="zh-CN">安装包</span><span class="en" lang="en">Installer</span></span>
+          </li>
+          <li>
+            <a href="https://github.com/FXiaoai/ImageF/releases/download/v4.9/ImageF_CN.mov">ImageF_CN.mov</a>
+            <span class="file-note"><span class="zh" lang="zh-CN">中文演示</span><span class="en" lang="en">Chinese demo</span></span>
+          </li>
+          <li>
+            <a href="https://github.com/FXiaoai/ImageF/releases/download/v4.9/ImageF_EN.mov">ImageF_EN.mov</a>
+            <span class="file-note"><span class="zh" lang="zh-CN">英文演示</span><span class="en" lang="en">English demo</span></span>
+          </li>
+        </ul>
+        <p class="card-links">
+          <a href="https://github.com/FXiaoai/ImageF/releases/tag/v4.9">V4.9</a>
+          <a href="https://github.com/FXiaoai/ImageF/releases"><span class="zh" lang="zh-CN">全部发布</span><span class="en" lang="en">All releases</span></a>
+          <a href="https://github.com/FXiaoai/ImageF"><span class="zh" lang="zh-CN">上游仓库</span><span class="en" lang="en">Upstream repo</span></a>
+        </p>
+      </aside>
+    </div>
+    <div class="notes">
+      <article>
+        <h3><span class="zh" lang="zh-CN">结果放在哪里</span><span class="en" lang="en">Where results go</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN">保存在安装文件夹里的 <code>Output</code>。工具里可以改到别的文件夹。4.9 以前的结果仍留在原来的「输出」文件夹，不会被挪走。</span>
+          <span class="en" lang="en">They are saved in the <code>Output</code> folder inside the install folder. You can choose another folder in the tool. Results from versions before 4.9 stay in the old <code>输出</code> folder and are not moved.</span>
+        </p>
+      </article>
+      <article>
+        <h3><span class="zh" lang="zh-CN">联网与更新</span><span class="en" lang="en">Network and updates</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN">使用时不联网，也不检查更新。想在有新版时收到通知：打开上游仓库，点 Watch → Custom → Releases。更新方法是下载新的安装包运行，原地升级，设置保留。</span>
+          <span class="en" lang="en">It does not connect to the internet while you use it, and it does not check for updates. To hear about a new version, open the upstream repository and choose Watch → Custom → Releases. To update, download the new installer and run it. It upgrades in place and keeps your settings.</span>
+        </p>
+      </article>
+      <article>
+        <h3><span class="zh" lang="zh-CN">也可以用源码跑</span><span class="en" lang="en">Or run it from source</span></h3>
+        <p>
+          <span class="zh" lang="zh-CN">下载仓库，整个文件夹解压后双击 <code>ImageF.bat</code>。电脑上没有 Python 3.10 时，会只为当前用户安装，不需要管理员权限。源码不含离线安装文件，第一次运行会联网下载 Python 3.10.11 和 numpy、OpenCV、Pillow，大约 70 MB。这是使用过程中唯一会联网的情况。</span>
+          <span class="en" lang="en">Download the repository, unzip the whole folder, and double-click <code>ImageF.bat</code>. If Python 3.10 is missing, it is installed for the current user, with no administrator rights. The source has no offline installers, so the first run downloads Python 3.10.11 plus numpy, OpenCV and Pillow, about 70 MB. That first source run is the only time it connects to the internet.</span>
+        </p>
+      </article>
+    </div>
+    <p class="manual-link">
+      <span class="zh" lang="zh-CN">上游说明</span>
+      <span class="en" lang="en">Upstream notes:</span>
+      <a href="https://github.com/FXiaoai/ImageF/blob/main/README.zh-CN.md">README.zh-CN.md</a>
+      <span aria-hidden="true"> · </span>
+      <a href="https://github.com/FXiaoai/ImageF/blob/main/README.md">README.md</a>
+    </p>
+  </section>
+
+  <section class="chapter" id="license" aria-labelledby="license-title">
+    <div class="section-head">
+      <p class="section-index">06</p>
+      <h2 id="license-title"><span class="zh" lang="zh-CN">许可与署名</span><span class="en" lang="en">License and credit</span></h2>
+      <p class="section-lead">
+        <span class="zh" lang="zh-CN">Image F 由老F 构思、设计并主导开发，按 <strong>PolyForm Noncommercial License 1.0.0</strong> 提供。源码公开，可以免费使用、修改，不能商用。因为禁止商用，它不属于 OSI 定义的开源许可，准确的说法是「源码公开」。</span>
+        <span class="en" lang="en">Image F was conceived, designed and developed by 老F. It is source-available under the <strong>PolyForm Noncommercial License 1.0.0</strong>: free to use and modify, and not for commercial use. Because commercial use is not allowed, it is not an open-source license in the OSI sense.</span>
+      </p>
+    </div>
+    <div class="license-grid">
+      <article>
+        <h3><span class="zh" lang="zh-CN">可以</span><span class="en" lang="en">You may</span></h3>
+        <ul>
+          <li><span class="zh" lang="zh-CN">免费使用</span><span class="en" lang="en">Use it free of charge</span></li>
+          <li><span class="zh" lang="zh-CN">个人学习、研究、创作、业余项目</span><span class="en" lang="en">Personal study, research, creative work and hobby projects</span></li>
+          <li><span class="zh" lang="zh-CN">学校、公益组织、科研机构、政府机构使用</span><span class="en" lang="en">Use in schools, charities, research institutions and government bodies</span></li>
+          <li><span class="zh" lang="zh-CN">修改源码</span><span class="en" lang="en">Modify the source</span></li>
+          <li><span class="zh" lang="zh-CN">把原版或改过的版本免费转发</span><span class="en" lang="en">Share the original or a modified version free of charge</span></li>
+        </ul>
+      </article>
+      <article>
+        <h3><span class="zh" lang="zh-CN">必须</span><span class="en" lang="en">You must</span></h3>
+        <ul>
+          <li><span class="zh" lang="zh-CN">转发或发布时附上 <code>LICENSE.txt</code>，改过的版本也一样</span><span class="en" lang="en">Include <code>LICENSE.txt</code> when you share or publish it, including a modified version</span></li>
+          <li><span class="zh" lang="zh-CN">原样保留每一行以 <code>Required Notice:</code> 开头的署名</span><span class="en" lang="en">Keep every line that starts with <code>Required Notice:</code> unchanged</span></li>
+        </ul>
+      </article>
+      <article>
+        <h3><span class="zh" lang="zh-CN">不可以</span><span class="en" lang="en">You may not</span></h3>
+        <ul>
+          <li><span class="zh" lang="zh-CN">任何商业用途：出售、收费下载、付费会员或付费群、收费课程、收费服务、在营利公司的业务里使用</span><span class="en" lang="en">Any commercial use: selling it, paid downloads, paid memberships or groups, paid courses, paid services, or use in a for-profit business</span></li>
+          <li><span class="zh" lang="zh-CN">去掉或改掉老F 的署名</span><span class="en" lang="en">Remove or change 老F’s credit</span></li>
+        </ul>
+      </article>
+    </div>
+    <div class="prose license-after">
+      <p>
+        <span class="zh" lang="zh-CN">想商用，请先联系老F，取得书面授权。完整条款以仓库里 <a href="https://github.com/FXiaoai/ImageF/blob/main/LICENSE.txt">LICENSE.txt</a> 的英文原文为准。中文摘要见 <a href="https://github.com/FXiaoai/ImageF/blob/main/LICENSE.zh-CN.txt">LICENSE.zh-CN.txt</a>。许可名称的公布页：<a href="https://polyformproject.org/licenses/noncommercial/1.0.0">PolyForm Noncommercial 1.0.0</a>。</span>
+        <span class="en" lang="en">For commercial use, contact 老F for written permission first. The English text in <a href="https://github.com/FXiaoai/ImageF/blob/main/LICENSE.txt">LICENSE.txt</a> is the binding version. A Chinese summary is in <a href="https://github.com/FXiaoai/ImageF/blob/main/LICENSE.zh-CN.txt">LICENSE.zh-CN.txt</a>. The license’s published page: <a href="https://polyformproject.org/licenses/noncommercial/1.0.0">PolyForm Noncommercial 1.0.0</a>.</span>
+      </p>
+      <p>
+        <span class="zh" lang="zh-CN">随工具带的第三方组件按各自的许可分发：YuNet 人脸模型（MIT）、Depth Anything V2 Small（Apache-2.0）、Python，以及 numpy / OpenCV / Pillow。见 <a href="https://github.com/FXiaoai/ImageF/blob/main/tools/THIRD_PARTY_NOTICES.txt">tools/THIRD_PARTY_NOTICES.txt</a>。</span>
+        <span class="en" lang="en">Bundled third-party components keep their own licenses: the YuNet face model (MIT), Depth Anything V2 Small (Apache-2.0), Python, and numpy / OpenCV / Pillow. See <a href="https://github.com/FXiaoai/ImageF/blob/main/tools/THIRD_PARTY_NOTICES.txt">tools/THIRD_PARTY_NOTICES.txt</a>.</span>
+      </p>
+      <p>
+        <span class="zh" lang="zh-CN">本页由 Junie Lau 整理，供自己的影像学习。它不发行 Image F，也不改写上游许可。</span>
+        <span class="en" lang="en">Junie Lau keeps this page for her own work with images. It does not distribute Image F, and it does not rewrite the upstream license.</span>
+      </p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <p class="footer-name">Junie Lau</p>
+      <p>
+        <span class="zh" lang="zh-CN">电影人的独立导读。不是官方产品站。</span>
+        <span class="en" lang="en">An independent filmmaker’s guide. Not the official product site.</span>
+      </p>
+    </div>
+    <div>
+      <p class="footer-label"><span class="zh" lang="zh-CN">上游</span><span class="en" lang="en">Upstream</span></p>
+      <p><a href="https://github.com/FXiaoai/ImageF">Image F · 老F</a></p>
+      <p class="footer-url">github.com/FXiaoai/ImageF</p>
+    </div>
+    <div>
+      <p class="footer-label"><span class="zh" lang="zh-CN">本站</span><span class="en" lang="en">This site</span></p>
+      <p><a href="https://github.com/JunieLau/Imagechagptmj">Imagechagptmj</a></p>
+      <p class="footer-url"><a href="https://junielau.github.io/Imagechagptmj/">junielau.github.io/Imagechagptmj/</a></p>
+    </div>
+  </div>
+  <p class="colophon">
+    <span class="zh" lang="zh-CN">静态页面。语言选择记在这台浏览器里。</span>
+    <span class="en" lang="en">A static page. The language choice stays in this browser.</span>
+  </p>
+</footer>
+<noscript>
+  <p class="noscript">语言按钮需要 JavaScript。未启用时，中文和英文会一起显示。 / The language buttons need JavaScript. Without it, Chinese and English stay on the page together.</p>
+</noscript>
+</body>
+</html>
